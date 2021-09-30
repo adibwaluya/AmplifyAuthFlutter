@@ -4,8 +4,16 @@ import 'package:flutter/material.dart';
 
 import '../theme.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
+
+  @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +43,7 @@ class SignInPage extends StatelessWidget {
                   ),
                   Expanded(
                       child: TextFormField(
+                    controller: _emailController,
                     style: blackRegularTextStyle,
                     decoration: InputDecoration.collapsed(
                       hintText: 'Email Kamu',
@@ -77,6 +86,7 @@ class SignInPage extends StatelessWidget {
                   ),
                   Expanded(
                       child: TextFormField(
+                    controller: _passwordController,
                     style: blackRegularTextStyle,
                     obscureText: true,
                     decoration: InputDecoration.collapsed(
