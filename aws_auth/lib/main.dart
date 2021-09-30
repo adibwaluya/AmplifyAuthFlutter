@@ -20,8 +20,13 @@ class _MyAppState extends State<MyApp> {
   final _authService = AuthService();
 
   @override
+  void initState() {
+    super.initState();
+    _authService.showLogIn();
+  }
+
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       /*
       routes: {
@@ -31,13 +36,27 @@ class _MyAppState extends State<MyApp> {
       },
       */
 
-      home: Navigator(
-        pages: [
-          MaterialPage(child: SignInPage()),
-          MaterialPage(child: SignUpPage()),
-          MaterialPage(child: FeedPage()),
-        ],
-      ),
+      home: StreamBuilder<AuthState>(
+          stream: _authService.authStateController.stream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Navigator(
+                pages: [
+                  // show Login page
+                  if (snapshot.data?.authFlowStatus == AuthFlowStatus.login)
+                    MaterialPage(child: SignInPage()),
+                  if (snapshot.data?.authFlowStatus == AuthFlowStatus.signup)
+                    MaterialPage(child: SignUpPage())
+                ],
+                onPopPage: (route, result) => route.didPop(result),
+              );
+            } else {
+              return Container(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(),
+              );
+            }
+          }),
     );
   }
 }
