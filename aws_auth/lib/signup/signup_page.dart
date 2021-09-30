@@ -1,3 +1,4 @@
+import 'package:aws_auth/signin/signin_page.dart';
 import 'package:aws_auth/signup/signup_background.dart';
 import 'package:aws_auth/widgets/bottom_navigation.dart';
 import 'package:flutter/material.dart';
@@ -160,7 +161,10 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/');
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SignInPage()));
               },
               child: Text(
                 'Sign In',
