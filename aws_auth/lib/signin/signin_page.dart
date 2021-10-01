@@ -123,9 +123,7 @@ class _SignInPageState extends State<SignInPage> {
               style: greyTextStyle.copyWith(fontSize: 12),
             ),
             GestureDetector(
-              onTap: () {
-                widget.shouldShowSignUp;
-              },
+              onTap: widget.shouldShowSignUp,
               child: Text(
                 'Sign Up',
                 style: darkPurpleTextStyle.copyWith(fontSize: 12),
