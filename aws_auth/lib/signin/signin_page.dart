@@ -1,3 +1,4 @@
+import 'package:aws_auth/auth/auth_credentials.dart';
 import 'package:aws_auth/signin/signin_background.dart';
 import 'package:aws_auth/signup/signup_page.dart';
 import 'package:aws_auth/widgets/bottom_navigation.dart';
@@ -6,14 +7,20 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 
 class SignInPage extends StatefulWidget {
-  const SignInPage({Key? key}) : super(key: key);
+  final ValueChanged<LoginCredentials> didProvideCredentials;
+  final VoidCallback shouldShowSignUp;
+  const SignInPage(
+      {Key? key,
+      required this.didProvideCredentials,
+      required this.shouldShowSignUp})
+      : super(key: key);
 
   @override
   State<SignInPage> createState() => _SignInPageState();
 }
 
 class _SignInPageState extends State<SignInPage> {
-  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
@@ -35,7 +42,7 @@ class _SignInPageState extends State<SignInPage> {
               child: Center(
                 child: Row(children: [
                   Image.asset(
-                    "assets/icons/Email_icon.png",
+                    "assets/icons/Avatar_icon.png",
                     width: 25,
                     height: 25,
                   ),
@@ -44,10 +51,10 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   Expanded(
                       child: TextFormField(
-                    controller: _emailController,
+                    controller: _usernameController,
                     style: blackRegularTextStyle,
                     decoration: InputDecoration.collapsed(
-                      hintText: 'Email Kamu',
+                      hintText: 'Username',
                       hintStyle: hintTextStyle.copyWith(
                         fontSize: 15,
                       ),
@@ -117,10 +124,7 @@ class _SignInPageState extends State<SignInPage> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SignUpPage()));
+                widget.shouldShowSignUp;
               },
               child: Text(
                 'Sign Up',
@@ -130,6 +134,18 @@ class _SignInPageState extends State<SignInPage> {
           ],
         ),
       );
+    }
+
+    void _login() {
+      final username = _usernameController.text.trim();
+      final password = _passwordController.text.trim();
+
+      print('$username');
+      print('$password');
+
+      final credentials =
+          LoginCredentials(username: username, password: password);
+      widget.didProvideCredentials(credentials);
     }
 
     return SafeArea(

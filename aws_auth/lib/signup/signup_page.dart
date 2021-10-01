@@ -1,3 +1,4 @@
+import 'package:aws_auth/auth/auth_credentials.dart';
 import 'package:aws_auth/signin/signin_page.dart';
 import 'package:aws_auth/signup/signup_background.dart';
 import 'package:aws_auth/widgets/bottom_navigation.dart';
@@ -6,14 +7,20 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  final VoidCallback shouldShowLogin;
+  final ValueChanged<SignUpCredentials> didProvideCredentials;
+  const SignUpPage(
+      {Key? key,
+      required this.didProvideCredentials,
+      required this.shouldShowLogin})
+      : super(key: key);
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final _nameController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -45,7 +52,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   Expanded(
                       child: TextFormField(
-                    controller: _nameController,
+                    controller: _usernameController,
                     style: blackRegularTextStyle,
                     decoration: InputDecoration.collapsed(
                       hintText: 'Nama Lengkap Kamu',
@@ -161,10 +168,7 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SignInPage()));
+                widget.shouldShowLogin;
               },
               child: Text(
                 'Sign In',
@@ -174,6 +178,23 @@ class _SignUpPageState extends State<SignUpPage> {
           ],
         ),
       );
+    }
+
+    void signUp() {
+      final username = _usernameController.text.trim();
+      final email = _emailController.text.trim();
+      final password = _passwordController.text.trim();
+
+      print('$username');
+      print('$email');
+      print('$password');
+
+      final credentials = SignUpCredentials(
+        username: username,
+        email: email,
+        password: password,
+      );
+      widget.didProvideCredentials(credentials);
     }
 
     return SafeArea(
