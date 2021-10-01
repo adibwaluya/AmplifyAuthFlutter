@@ -17,7 +17,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   int _currentIndex = 0;
 
   final screens = [
-    const FeedPage(),
+    //const FeedPage(),
     const PlanPage(),
     const InboxPage(),
     const ProfilePage(),

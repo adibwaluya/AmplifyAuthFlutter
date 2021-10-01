@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
-class FeedPage extends StatefulWidget {
-  const FeedPage({Key? key}) : super(key: key);
+class FeedPage extends StatelessWidget {
+  final VoidCallback shouldLogOut;
+  const FeedPage({Key? key, required this.shouldLogOut}) : super(key: key);
 
-  @override
-  State<FeedPage> createState() => _FeedPageState();
-}
-
-class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
-    return const Text('This is Feed Page');
+    return Scaffold(
+      body: Center(
+        child: GestureDetector(
+          child: Icon(Icons.logout),
+          onTap: shouldLogOut,
+        ),
+      ),
+    );
   }
 }

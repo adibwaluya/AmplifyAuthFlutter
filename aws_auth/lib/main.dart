@@ -63,7 +63,10 @@ class _MyAppState extends State<MyApp> {
                     MaterialPage(
                         child: VerificationPage(
                             didProvideVerificationCode:
-                                _authService.verifyingCode))
+                                _authService.verifyingCode)),
+                  if (snapshot.data?.authFlowStatus == AuthFlowStatus.session)
+                    MaterialPage(
+                        child: FeedPage(shouldLogOut: _authService.logOut))
                 ],
                 onPopPage: (route, result) => route.didPop(result),
               );
