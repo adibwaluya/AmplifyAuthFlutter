@@ -2,6 +2,7 @@ import 'package:aws_auth/auth/auth_service.dart';
 import 'package:aws_auth/signin/signin_page.dart';
 import 'package:aws_auth/signup/signup_page.dart';
 import 'package:aws_auth/verification/verification_page.dart';
+import 'package:aws_auth/widgets/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 
 import 'feed/feed_page.dart';
@@ -66,7 +67,9 @@ class _MyAppState extends State<MyApp> {
                                 _authService.verifyingCode)),
                   if (snapshot.data?.authFlowStatus == AuthFlowStatus.session)
                     MaterialPage(
-                        child: FeedPage(shouldLogOut: _authService.logOut))
+                        child: BottomNavigation(
+                      shouldLogOut: _authService.logOut,
+                    )),
                 ],
                 onPopPage: (route, result) => route.didPop(result),
               );

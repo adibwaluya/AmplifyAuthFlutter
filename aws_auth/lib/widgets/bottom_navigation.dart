@@ -1,3 +1,4 @@
+import 'package:aws_auth/auth/auth_service.dart';
 import 'package:aws_auth/feed/feed_page.dart';
 import 'package:aws_auth/inbox/inbox_page.dart';
 import 'package:aws_auth/plan/plan_page.dart';
@@ -7,28 +8,66 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 
 class BottomNavigation extends StatefulWidget {
-  const BottomNavigation({Key? key}) : super(key: key);
+  final VoidCallback shouldLogOut;
+  const BottomNavigation({Key? key, required this.shouldLogOut})
+      : super(key: key);
 
   @override
   _BottomNavigationState createState() => _BottomNavigationState();
 }
 
 class _BottomNavigationState extends State<BottomNavigation> {
+  final _authService = AuthService();
   int _currentIndex = 0;
 
+  List<Widget> get _pages {
+    return [
+      // Show Feed Page
+      FeedPage(shouldLogOut: widget.shouldLogOut),
+
+      // Show Plan Page
+      const PlanPage(),
+
+      // Inbox Page
+      const InboxPage(),
+
+      // Profile Page
+      const ProfilePage(),
+    ];
+  }
+
+/*
+  Widget getPage(int index) {
+    switch (index) {
+      case 0:
+        return FeedPage(shouldLogOut: _authService.logOut);
+      case 1:
+        return PlanPage();
+      case 2:
+        return InboxPage();
+      case 3:
+        return ProfilePage();
+      default:
+        return FeedPage(shouldLogOut: _authService.logOut);
+    }
+  }
+  */
+
+  /*
   final screens = [
-    //const FeedPage(),
+    const FeedPage(),
     const PlanPage(),
     const InboxPage(),
     const ProfilePage(),
   ];
+  */
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: screens,
+        children: _pages,
       ),
       bottomNavigationBar: ClipRRect(
         borderRadius: BorderRadius.circular(30),
