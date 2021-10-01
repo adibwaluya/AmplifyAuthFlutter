@@ -180,12 +180,7 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) {
-                              return const BottomNavigation();
-                            }),
-                          );
+                          _login();
                         },
                         child: Text(
                           'Sign In',

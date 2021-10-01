@@ -180,7 +180,7 @@ class _SignUpPageState extends State<SignUpPage> {
       );
     }
 
-    void signUp() {
+    void _signUp() {
       final username = _usernameController.text.trim();
       final email = _emailController.text.trim();
       final password = _passwordController.text.trim();
@@ -230,12 +230,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) {
-                              return BottomNavigation();
-                            }),
-                          );
+                          _signUp();
                         },
                         child: Text(
                           'Sign Up',
