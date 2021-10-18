@@ -18,12 +18,14 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   final _authService = AuthService();
+  late final String jwt;
+  late final Map<String, dynamic> payload;
   int _currentIndex = 0;
 
   List<Widget> get _pages {
     return [
       // Show Feed Page
-      FeedPage(shouldLogOut: widget.shouldLogOut),
+      FeedPage(jwt, payload),
 
       // Show Plan Page
       const PlanPage(),

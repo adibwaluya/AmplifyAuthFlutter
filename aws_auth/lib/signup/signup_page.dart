@@ -3,17 +3,21 @@ import 'package:aws_auth/signin/signin_page.dart';
 import 'package:aws_auth/signup/signup_background.dart';
 import 'package:aws_auth/widgets/bottom_navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' show json, base64, ascii, utf8;
 
 import '../theme.dart';
 
+const SERVER_IP = 'http://192.168.42.75:8000';
+final storage = FlutterSecureStorage();
+
 class SignUpPage extends StatefulWidget {
-  final VoidCallback shouldShowLogin;
-  final ValueChanged<SignUpCredentials> didProvideCredentials;
-  const SignUpPage(
-      {Key? key,
-      required this.didProvideCredentials,
-      required this.shouldShowLogin})
-      : super(key: key);
+  //final VoidCallback shouldShowLogin;
+  //final ValueChanged<SignUpCredentials> didProvideCredentials;
+  const SignUpPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -23,6 +27,32 @@ class _SignUpPageState extends State<SignUpPage> {
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _passwordConfirmationController = TextEditingController();
+
+  void displayDialog(context, title, text) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(title),
+          content: Text(text),
+        ),
+      );
+
+  Future<int> attemptSignUp(String name, String email, String password,
+      String passwordConfirmation) async {
+    var res = await http.post(Uri.parse('$SERVER_IP/api/auth/register'), body: {
+      "name": name,
+      "email": email,
+      "password": password,
+      "password_confirmation": passwordConfirmation,
+    });
+    var jsonResponse = null;
+    if (res.statusCode == 201) {
+      jsonResponse = json.decode(res.body);
+      print('Response status: ${res.statusCode}');
+      print('Response body: ${res.body}');
+    }
+    return res.statusCode;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -156,6 +186,50 @@ class _SignUpPageState extends State<SignUpPage> {
       );
     }
 
+    Widget passwordConfirmationInput() {
+      return Container(
+        margin: EdgeInsets.only(top: 20),
+        child: Column(
+          children: [
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: greyColor,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Center(
+                child: Row(children: [
+                  Image.asset(
+                    "assets/icons/Lock_icon.png",
+                    width: 25,
+                    height: 25,
+                  ),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                      child: TextFormField(
+                    controller: _passwordConfirmationController,
+                    style: blackRegularTextStyle,
+                    obscureText: true,
+                    decoration: InputDecoration.collapsed(
+                      hintText: 'Password Confirmation',
+                      hintStyle: hintTextStyle.copyWith(
+                        fontSize: 15,
+                      ),
+                    ),
+                  )),
+                ]),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     Widget createAccount() {
       return Container(
         margin: EdgeInsets.only(top: 24),
@@ -167,7 +241,12 @@ class _SignUpPageState extends State<SignUpPage> {
               style: greyTextStyle.copyWith(fontSize: 12),
             ),
             GestureDetector(
-              onTap: widget.shouldShowLogin,
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SignInPage()));
+              },
               child: Text(
                 'Sign In',
                 style: darkPurpleTextStyle.copyWith(fontSize: 12),
@@ -178,6 +257,7 @@ class _SignUpPageState extends State<SignUpPage> {
       );
     }
 
+/*
     void _signUp() {
       final username = _usernameController.text.trim();
       final email = _emailController.text.trim();
@@ -194,7 +274,7 @@ class _SignUpPageState extends State<SignUpPage> {
       );
       widget.didProvideCredentials(credentials);
     }
-
+*/
     return SafeArea(
       child: Scaffold(
         body: SignUpBackground(
@@ -219,6 +299,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   nameInput(),
                   emailInput(),
                   passwordInput(),
+                  passwordConfirmationInput(),
                   /* TODO: TO BE MOVED ASAP! */
                   Container(
                     height: 50,
@@ -227,8 +308,35 @@ class _SignUpPageState extends State<SignUpPage> {
                       top: 25,
                     ),
                     child: ElevatedButton(
-                        onPressed: () {
-                          _signUp();
+                        onPressed: () async {
+                          var name = _usernameController.text;
+                          var email = _emailController.text;
+                          var password = _passwordController.text;
+                          var passwordConfirmation =
+                              _passwordConfirmationController.text;
+
+                          if (name.length < 4) {
+                            displayDialog(context, "Invalid Username",
+                                "The username should be at least 4 characters long");
+                          } else if (password.length < 4)
+                            displayDialog(context, "Invalid Password",
+                                "The password should be at least 4 characters long");
+                          else {
+                            var res = await attemptSignUp(
+                                name, email, password, passwordConfirmation);
+                            if (res == 201)
+                              displayDialog(context, "Success",
+                                  "The user was created. Log in now.");
+                            else if (res == 409)
+                              displayDialog(
+                                  context,
+                                  "That username is already registered",
+                                  "Please try to sign up using another username or log in if you already have an account.");
+                            else {
+                              displayDialog(context, "Error",
+                                  "An unknown error occured.");
+                            }
+                          }
                         },
                         child: Text(
                           'Sign Up',

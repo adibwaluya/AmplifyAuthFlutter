@@ -7,7 +7,9 @@ INJECTED from C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthF
 MERGED from C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthFlutter\aws_auth\android\app\src\main\AndroidManifest.xml:1:1-41:12
 MERGED from [:amplify_auth_cognito] C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthFlutter\aws_auth\build\amplify_auth_cognito\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:amplify_core] C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthFlutter\aws_auth\build\amplify_core\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:shared_preferences] C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthFlutter\aws_auth\build\shared_preferences\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:path_provider] C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthFlutter\aws_auth\build\path_provider\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:flutter_secure_storage] C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthFlutter\aws_auth\build\flutter_secure_storage\intermediates\library_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [com.amplifyframework:aws-auth-cognito:1.24.1] C:\Users\agwpc\.gradle\caches\transforms-2\files-2.1\0f19810bfeb1b4b8bd30f32b1f69f5c5\jetified-aws-auth-cognito-1.24.1\AndroidManifest.xml:16:1-24:12
 MERGED from [com.amplifyframework:core:1.24.1] C:\Users\agwpc\.gradle\caches\transforms-2\files-2.1\0a5dcf384b8cf2bc1c764b8b8d1fbb67\jetified-core-1.24.1\AndroidManifest.xml:16:1-32:12
 MERGED from [com.amazonaws:aws-android-sdk-cognitoauth:2.26.0] C:\Users\agwpc\.gradle\caches\transforms-2\files-2.1\91702cd2fac5d14ee3860652c0184555\jetified-aws-android-sdk-cognitoauth-2.26.0\AndroidManifest.xml:2:1-19:12
@@ -158,8 +160,12 @@ MERGED from [:amplify_auth_cognito] C:\Users\agwpc\Documents\Flutter_tutorial\Am
 MERGED from [:amplify_auth_cognito] C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthFlutter\aws_auth\build\amplify_auth_cognito\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:amplify_core] C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthFlutter\aws_auth\build\amplify_core\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:amplify_core] C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthFlutter\aws_auth\build\amplify_core\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:shared_preferences] C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthFlutter\aws_auth\build\shared_preferences\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:shared_preferences] C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthFlutter\aws_auth\build\shared_preferences\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:path_provider] C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthFlutter\aws_auth\build\path_provider\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:path_provider] C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthFlutter\aws_auth\build\path_provider\intermediates\library_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_secure_storage] C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthFlutter\aws_auth\build\flutter_secure_storage\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
+MERGED from [:flutter_secure_storage] C:\Users\agwpc\Documents\Flutter_tutorial\AmplifyAuth\AmplifyAuthFlutter\aws_auth\build\flutter_secure_storage\intermediates\library_manifest\debug\AndroidManifest.xml:7:5-9:41
 MERGED from [com.amplifyframework:aws-auth-cognito:1.24.1] C:\Users\agwpc\.gradle\caches\transforms-2\files-2.1\0f19810bfeb1b4b8bd30f32b1f69f5c5\jetified-aws-auth-cognito-1.24.1\AndroidManifest.xml:20:5-22:41
 MERGED from [com.amplifyframework:aws-auth-cognito:1.24.1] C:\Users\agwpc\.gradle\caches\transforms-2\files-2.1\0f19810bfeb1b4b8bd30f32b1f69f5c5\jetified-aws-auth-cognito-1.24.1\AndroidManifest.xml:20:5-22:41
 MERGED from [com.amplifyframework:core:1.24.1] C:\Users\agwpc\.gradle\caches\transforms-2\files-2.1\0a5dcf384b8cf2bc1c764b8b8d1fbb67\jetified-core-1.24.1\AndroidManifest.xml:20:5-22:41

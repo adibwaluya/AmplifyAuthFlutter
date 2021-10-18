@@ -4,9 +4,14 @@ import 'package:aws_auth/signup/signup_page.dart';
 import 'package:aws_auth/verification/verification_page.dart';
 import 'package:aws_auth/widgets/bottom_navigation.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert' show json, base64, ascii, utf8;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'feed/feed_page.dart';
 
+const SERVER_IP = 'http://192.168.42.75:8000';
+final storage = FlutterSecureStorage();
 void main() {
   runApp(const MyApp());
 }
@@ -19,6 +24,26 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late SharedPreferences sharedPreferences;
+
+  /*
+  Future<String> get jwtOrEmpty async {
+    var jwt = await storage.read(key: "jwt");
+    if (jwt == null) return "";
+    return jwt;
+  }
+  */
+
+/*
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString("token") == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => SignInPage()),
+          (Route<dynamic> route) => false);
+    }
+  }
+*/
   final _authService = AuthService();
 
   @override
@@ -27,10 +52,20 @@ class _MyAppState extends State<MyApp> {
     _authService.showLogIn();
   }
 
+/*
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString("token") == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => SignInPage()),
+          (Route<dynamic> route) => false);
+    }
+  }
+*/
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      /*
+        debugShowCheckedModeBanner: false,
+        /*
       routes: {
         '/': (context) => const SignInPage(),
         '/feed-page': (context) => const FeedPage(),
@@ -38,48 +73,6 @@ class _MyAppState extends State<MyApp> {
       },
       */
 
-      home: StreamBuilder<AuthState>(
-          stream: _authService.authStateController.stream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Navigator(
-                pages: [
-                  // show Login page
-                  if (snapshot.data?.authFlowStatus == AuthFlowStatus.login)
-                    MaterialPage(
-                        child: SignInPage(
-                      didProvideCredentials: _authService.loginWithCredentials,
-                      shouldShowSignUp: _authService.showSignUp,
-                    )),
-                  // show SignUp page
-                  if (snapshot.data?.authFlowStatus == AuthFlowStatus.signup)
-                    MaterialPage(
-                        child: SignUpPage(
-                      didProvideCredentials: _authService.signUpWithCredentials,
-                      shouldShowLogin: _authService.showLogIn,
-                    )),
-                  // show Verification Code page
-                  if (snapshot.data?.authFlowStatus ==
-                      AuthFlowStatus.verification)
-                    MaterialPage(
-                        child: VerificationPage(
-                            didProvideVerificationCode:
-                                _authService.verifyingCode)),
-                  if (snapshot.data?.authFlowStatus == AuthFlowStatus.session)
-                    MaterialPage(
-                        child: BottomNavigation(
-                      shouldLogOut: _authService.logOut,
-                    )),
-                ],
-                onPopPage: (route, result) => route.didPop(result),
-              );
-            } else {
-              return Container(
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(),
-              );
-            }
-          }),
-    );
+        home: SignInPage());
   }
 }
