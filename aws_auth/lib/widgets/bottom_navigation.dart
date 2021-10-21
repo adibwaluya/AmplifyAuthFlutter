@@ -8,9 +8,10 @@ import 'package:flutter/material.dart';
 import '../theme.dart';
 
 class BottomNavigation extends StatefulWidget {
-  final VoidCallback shouldLogOut;
-  const BottomNavigation({Key? key, required this.shouldLogOut})
-      : super(key: key);
+  //final VoidCallback shouldLogOut;
+  const BottomNavigation({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _BottomNavigationState createState() => _BottomNavigationState();
@@ -18,14 +19,14 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   final _authService = AuthService();
-  late final String jwt;
-  late final Map<String, dynamic> payload;
+  //late final String jwt;
+  //late final Map<String, dynamic> payload;
   int _currentIndex = 0;
 
   List<Widget> get _pages {
     return [
       // Show Feed Page
-      FeedPage(jwt, payload),
+      FeedPage(),
 
       // Show Plan Page
       const PlanPage(),

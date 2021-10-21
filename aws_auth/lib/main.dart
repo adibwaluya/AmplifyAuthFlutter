@@ -7,13 +7,18 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' show json, base64, ascii, utf8;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'auth/auth.dart';
 import 'feed/feed_page.dart';
 
 const SERVER_IP = 'http://192.168.42.75:8000';
 final storage = FlutterSecureStorage();
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => Auth(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {

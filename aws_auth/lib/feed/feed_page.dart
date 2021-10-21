@@ -1,25 +1,34 @@
+import 'package:aws_auth/auth/auth.dart';
+import 'package:aws_auth/signin/signin_page.dart';
+import 'package:aws_auth/signup/signup_page.dart';
+import 'package:aws_auth/widgets/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert' show ascii, base64, json, utf8;
 
+import 'package:provider/provider.dart';
+
 const SERVER_IP = 'http://192.168.42.75:8000';
 
 class FeedPage extends StatelessWidget {
-  final String jwt;
-  final Map<String, dynamic> payload;
-  FeedPage(this.jwt, this.payload);
+  //final String jwt;
+  //final Map<String, dynamic> payload;
+  //FeedPage(this.jwt, this.payload);
 
+/*
   factory FeedPage.fromBase64(String jwt) => FeedPage(
       jwt,
       json.decode(
           utf8.decode(base64.decode(base64.normalize(jwt.split(".")[1])))));
+          */
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: FutureBuilder(
+    return SafeArea(
+      child: Scaffold(body: Center(child: Text("You just logged in!"))),
+      /*
+        FutureBuilder(
           future: http.read(
               Uri.parse('http://192.168.42.75:8000/api/auth/user-profile'),
               headers: {"Authorization": jwt}),
@@ -34,7 +43,7 @@ class FeedPage extends StatelessWidget {
                   ? Text("An Error occured")
                   : CircularProgressIndicator(),
         ),
-      ),
+        */
     );
   }
 }

@@ -1,9 +1,12 @@
+import 'package:aws_auth/auth/auth.dart';
 import 'package:aws_auth/feed/feed_page.dart';
 import 'package:aws_auth/signin/signin_background.dart';
 import 'package:aws_auth/signup/signup_page.dart';
+import 'package:aws_auth/widgets/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -177,6 +180,7 @@ class _SignInPageState extends State<SignInPage> {
       );
     }
 
+/*
     Widget buttonSelection() {
       return Container(
         height: 50,
@@ -217,12 +221,31 @@ class _SignInPageState extends State<SignInPage> {
             )),
       );
     }
-
+*/
     void dispose() {
       _emailController.dispose();
       _passwordController.dispose();
 
       super.dispose();
+    }
+
+    void _submit() {
+      Provider.of<Auth>(context, listen: false).signin(
+          data: {
+            'email': _emailController.text,
+            'password': _passwordController.text
+          },
+          success: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return BottomNavigation();
+            }));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text("Login Successful")));
+          },
+          error: () {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text("Invalid Credentials")));
+          });
     }
 
     Widget createAccount() {
@@ -253,35 +276,41 @@ class _SignInPageState extends State<SignInPage> {
     }
 
     return SafeArea(
-      child: Scaffold(
-        body: SignInBackground(
-          child: _isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : ListView(children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 100, left: 65, right: 65),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset(
-                          'assets/images/Nusatutor_logo_transparant.png',
-                          width: 140,
-                          height: 122.28,
-                        ),
-                        const SizedBox(
-                          height: 22,
-                        ),
-                        Text(
-                          'Nusaplanner',
-                          style: blackSemiBoldTextStyle.copyWith(fontSize: 30),
-                        ),
-                        emailInput(),
-                        passwordInput(),
-                        /* TODO: TO BE MOVED ASAP! */
-                        /*
+      child: Scaffold(body: Center(
+        child: Consumer<Auth>(
+          builder: (context, auth, child) {
+            if (auth.loggedIn) {
+              return const BottomNavigation();
+            } else {
+              return SignInBackground(
+                child: _isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : ListView(children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              top: 100, left: 65, right: 65),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Image.asset(
+                                'assets/images/Nusatutor_logo_transparant.png',
+                                width: 140,
+                                height: 122.28,
+                              ),
+                              const SizedBox(
+                                height: 22,
+                              ),
+                              Text(
+                                'Nusaplanner',
+                                style: blackSemiBoldTextStyle.copyWith(
+                                    fontSize: 30),
+                              ),
+                              emailInput(),
+                              passwordInput(),
+                              /* TODO: TO BE MOVED ASAP! */
+                              /*
                   Container(
                     height: 50,
                     width: double.infinity,
@@ -317,14 +346,37 @@ class _SignInPageState extends State<SignInPage> {
                         )),
                   ),
                   */
-                        buttonSelection(),
-                        createAccount(),
-                      ],
-                    ),
-                  ),
-                ]),
+                              ElevatedButton(
+                                  onPressed: () => _submit(),
+                                  child: Text(
+                                    "Sign in",
+                                    style:
+                                        whiteTextStyle.copyWith(fontSize: 16),
+                                  ),
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ),
+                                    foregroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            whiteColor),
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            darkPurpleColor),
+                                  )),
+                              createAccount(),
+                            ],
+                          ),
+                        ),
+                      ]),
+              );
+            }
+          },
         ),
-      ),
+      )),
     );
   }
 }

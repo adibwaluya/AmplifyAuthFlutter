@@ -40,11 +40,12 @@ dependencies:
   floating_bottom_navigation_bar: ^1.5.2
   amplify_core: ^0.2.4
   amplify_auth_cognito: ^0.2.4
-  flutter_login: ^2.2.1
   http: ^0.13.4
   flutter_secure_storage: ^4.2.1
   amazon_cognito_identity_dart_2: ^1.0.3
   shared_preferences: ^2.0.8
+  provider: ^6.0.1
+  dio: ^4.0.0
 
 dev_dependencies:
   flutter_test:
