@@ -1,16 +1,25 @@
 import 'dart:convert';
 
+import 'package:aws_auth/auth/user.dart';
 import 'package:aws_auth/dio.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Auth extends ChangeNotifier {
+  final storage = new FlutterSecureStorage();
+
   late String token;
   bool authenticated = false;
+  late User authenticatedUser; // To be updated!
 
   get loggedIn {
     return authenticated;
+  }
+
+  get user {
+    return authenticatedUser;
   }
 
   Future signin(
@@ -21,6 +30,7 @@ class Auth extends ChangeNotifier {
 
       var token = json.decode(response.toString())['data']['token'];
 
+      this._setStoredToken(token);
       this.attempt(token: token);
       notifyListeners();
 
@@ -41,17 +51,18 @@ class Auth extends ChangeNotifier {
     }
 
     try {
-      Dio.Response response = await dio().get('auth/user-profile',
-          options: Dio.Options(
-            headers: {
-              'Authorization': 'Bearer $token', // set content-length
-            },
-          ));
+      Dio.Response response = await dio().get(
+        'auth/user-profile',
+      );
       this.authenticated = true;
       print(json.decode(response.toString())['data']);
       notifyListeners();
     } catch (e) {
       this.authenticated = false;
     }
+  }
+
+  void _setStoredToken(String token) async {
+    await storage.write(key: 'token', value: token);
   }
 }

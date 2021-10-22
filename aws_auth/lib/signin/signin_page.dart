@@ -239,8 +239,6 @@ class _SignInPageState extends State<SignInPage> {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
               return BottomNavigation();
             }));
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text("Login Successful")));
           },
           error: () {
             ScaffoldMessenger.of(context)
