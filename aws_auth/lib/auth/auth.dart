@@ -10,9 +10,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class Auth extends ChangeNotifier {
   final storage = new FlutterSecureStorage();
 
-  late String token;
+  late var token;
   bool authenticated = false;
-  late User authenticatedUser; // To be updated!
+  late User? authenticatedUser; // To be updated!
 
   get loggedIn {
     return authenticated;
@@ -58,8 +58,22 @@ class Auth extends ChangeNotifier {
       print(json.decode(response.toString())['data']);
       notifyListeners();
     } catch (e) {
-      this.authenticated = false;
+      _setUnauthenticated();
     }
+  }
+
+  void signOut({required Function success}) async {
+    try {
+      await dio().post('auth/logout');
+      this._setUnauthenticated();
+      notifyListeners();
+    } catch (e) {}
+  }
+
+  void _setUnauthenticated() async {
+    authenticated = false;
+    authenticatedUser = null;
+    await storage.delete(key: 'token');
   }
 
   void _setStoredToken(String token) async {
