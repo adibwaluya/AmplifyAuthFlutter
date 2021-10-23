@@ -230,6 +230,9 @@ class _SignInPageState extends State<SignInPage> {
     }
 
     void _submit() {
+      setState(() {
+        _isLoading = true;
+      });
       Provider.of<Auth>(context, listen: false).signin(
           data: {
             'email': _emailController.text,
@@ -345,9 +348,10 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   */
                               ElevatedButton(
-                                  onPressed: () => _submit(),
+                                  onPressed:
+                                      _isLoading ? null : () => _submit(),
                                   child: Text(
-                                    "Sign in",
+                                    _isLoading ? "Logging in..." : "Sign in",
                                     style:
                                         whiteTextStyle.copyWith(fontSize: 16),
                                   ),

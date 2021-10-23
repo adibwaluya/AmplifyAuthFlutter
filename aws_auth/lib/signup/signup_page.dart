@@ -1,4 +1,5 @@
 import 'package:aws_auth/auth/auth_credentials.dart';
+import 'package:aws_auth/feed/feed_page.dart';
 import 'package:aws_auth/signin/signin_page.dart';
 import 'package:aws_auth/signup/signup_background.dart';
 import 'package:aws_auth/widgets/bottom_navigation.dart';
@@ -29,6 +30,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final _passwordController = TextEditingController();
   final _passwordConfirmationController = TextEditingController();
 
+  bool _isLoading = false;
+
   void displayDialog(context, title, text) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -47,6 +50,9 @@ class _SignUpPageState extends State<SignUpPage> {
     });
     var jsonResponse = null;
     if (res.statusCode == 201) {
+      setState(() {
+        _isLoading = true;
+      });
       jsonResponse = json.decode(res.body);
       print('Response status: ${res.statusCode}');
       print('Response body: ${res.body}');
@@ -278,88 +284,109 @@ class _SignUpPageState extends State<SignUpPage> {
     return SafeArea(
       child: Scaffold(
         body: SignUpBackground(
-          child: ListView(children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 100, left: 65, right: 65),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset(
-                    'assets/images/Nusatutor_logo_transparant.png',
-                    width: 140,
-                    height: 122.28,
-                  ),
-                  SizedBox(
-                    height: 22,
-                  ),
-                  Text(
-                    'Sign Up',
-                    style: blackSemiBoldTextStyle.copyWith(fontSize: 30),
-                  ),
-                  nameInput(),
-                  emailInput(),
-                  passwordInput(),
-                  passwordConfirmationInput(),
-                  /* TODO: TO BE MOVED ASAP! */
-                  Container(
-                    height: 50,
-                    width: double.infinity,
-                    margin: EdgeInsets.only(
-                      top: 25,
-                    ),
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          var name = _usernameController.text;
-                          var email = _emailController.text;
-                          var password = _passwordController.text;
-                          var passwordConfirmation =
-                              _passwordConfirmationController.text;
-
-                          if (name.length < 4) {
-                            displayDialog(context, "Invalid Username",
-                                "The username should be at least 4 characters long");
-                          } else if (password.length < 4)
-                            displayDialog(context, "Invalid Password",
-                                "The password should be at least 4 characters long");
-                          else {
-                            var res = await attemptSignUp(
-                                name, email, password, passwordConfirmation);
-                            if (res == 201)
-                              displayDialog(context, "Success",
-                                  "The user was created. Log in now.");
-                            else if (res == 409)
-                              displayDialog(
-                                  context,
-                                  "That username is already registered",
-                                  "Please try to sign up using another username or log in if you already have an account.");
-                            else {
-                              displayDialog(context, "Error",
-                                  "An unknown error occured.");
-                            }
-                          }
-                        },
-                        child: Text(
-                          'Sign Up',
-                          style: whiteTextStyle.copyWith(fontSize: 16),
+          child: _isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : ListView(children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(top: 100, left: 65, right: 65),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset(
+                          'assets/images/Nusatutor_logo_transparant.png',
+                          width: 140,
+                          height: 122.28,
                         ),
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
+                        SizedBox(
+                          height: 22,
+                        ),
+                        Text(
+                          'Sign Up',
+                          style: blackSemiBoldTextStyle.copyWith(fontSize: 30),
+                        ),
+                        nameInput(),
+                        emailInput(),
+                        passwordInput(),
+                        passwordConfirmationInput(),
+                        /* TODO: TO BE MOVED ASAP! */
+                        Container(
+                          height: 50,
+                          width: double.infinity,
+                          margin: EdgeInsets.only(
+                            top: 25,
                           ),
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(whiteColor),
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(darkPurpleColor),
-                        )),
+                          child: ElevatedButton(
+                              onPressed: _isLoading
+                                  ? null
+                                  : () async {
+                                      var name = _usernameController.text;
+                                      var email = _emailController.text;
+                                      var password = _passwordController.text;
+                                      var passwordConfirmation =
+                                          _passwordConfirmationController.text;
+
+                                      if (name.length < 4) {
+                                        displayDialog(
+                                            context,
+                                            "Invalid Username",
+                                            "The username should be at least 4 characters long");
+                                      } else if (password.length < 4)
+                                        displayDialog(
+                                            context,
+                                            "Invalid Password",
+                                            "The password should be at least 4 characters long");
+                                      else {
+                                        var res = await attemptSignUp(
+                                            name,
+                                            email,
+                                            password,
+                                            passwordConfirmation);
+                                        if (res == 201) {
+                                          Navigator.push(
+                                              context,
+                                              new MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      BottomNavigation()));
+                                          displayDialog(context, "Success",
+                                              "The user was created! You are now logged in!");
+                                        } else if (res == 409)
+                                          displayDialog(
+                                              context,
+                                              "That username is already registered",
+                                              "Please try to sign up using another username or log in if you already have an account.");
+                                        else {
+                                          displayDialog(context, "Error",
+                                              "An unknown error occured.");
+                                        }
+                                      }
+                                    },
+                              child: Text(
+                                _isLoading ? 'Creating...' : 'Sign Up',
+                                style: whiteTextStyle.copyWith(fontSize: 16),
+                              ),
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        whiteColor),
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        darkPurpleColor),
+                              )),
+                        ),
+                        createAccount(),
+                      ],
+                    ),
                   ),
-                  createAccount(),
-                ],
-              ),
-            ),
-          ]),
+                ]),
         ),
       ),
     );

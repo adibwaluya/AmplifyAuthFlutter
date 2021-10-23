@@ -40,6 +40,15 @@ class Auth extends ChangeNotifier {
     }
   }
 
+  // TODO!
+  Future signUp(
+      {Map? data, required Function success, required Function error}) async {
+    try {
+      Dio.Response response =
+          await dio().post('auth/register', data: json.encode(data));
+    } catch (e) {}
+  }
+
   void attempt({token = ''}) async {
     if (token.toString().isNotEmpty) {
       this.token = token;
