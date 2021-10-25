@@ -244,8 +244,11 @@ class _SignInPageState extends State<SignInPage> {
             }));
           },
           error: () {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text("Invalid Credentials")));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return SignInPage();
+            }));
+            displayDialog(context, "Invalid Email and Password",
+                "Please fill in the correct credentials");
           });
     }
 
