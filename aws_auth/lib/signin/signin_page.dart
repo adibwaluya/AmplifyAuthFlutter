@@ -1,5 +1,6 @@
 import 'package:aws_auth/auth/auth.dart';
 import 'package:aws_auth/feed/feed_page.dart';
+import 'package:aws_auth/onboarding/splash_screen.dart';
 import 'package:aws_auth/signin/signin_background.dart';
 import 'package:aws_auth/signup/signup_page.dart';
 import 'package:aws_auth/widgets/bottom_navigation.dart';
@@ -240,7 +241,7 @@ class _SignInPageState extends State<SignInPage> {
           },
           success: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return BottomNavigation();
+              return SplashScreen();
             }));
           },
           error: () {

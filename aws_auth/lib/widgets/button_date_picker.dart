@@ -29,6 +29,7 @@ class ButtonHeaderWidget extends StatelessWidget {
           Text(
             endText,
             style: blackSemiBoldTextStyle.copyWith(fontSize: 30),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
@@ -44,18 +45,28 @@ class ButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        minimumSize: Size.fromHeight(40),
-        primary: Colors.white,
-      ),
-      child: FittedBox(
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 20, color: Colors.black),
+    return Container(
+      height: 50,
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: 30),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          foregroundColor: MaterialStateProperty.all<Color>(whiteColor),
+          backgroundColor: MaterialStateProperty.all<Color>(darkPurpleColor),
         ),
+        child: FittedBox(
+          child: Text(
+            text,
+            style: TextStyle(fontSize: 20, color: Colors.white),
+          ),
+        ),
+        onPressed: onClicked,
       ),
-      onPressed: onClicked,
     );
   }
 }
