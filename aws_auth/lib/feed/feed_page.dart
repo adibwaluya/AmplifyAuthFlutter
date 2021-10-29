@@ -26,7 +26,16 @@ class FeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(body: Center(child: Text("You just logged in!"))),
+      child: Scaffold(body: Container(child: Consumer<Auth>(
+        builder: (context, auth, child) {
+          if (auth.loggedIn) {
+            return Text(auth.user.name);
+          }
+
+          return Text('a');
+        },
+      ))),
+
       /*
         FutureBuilder(
           future: http.read(

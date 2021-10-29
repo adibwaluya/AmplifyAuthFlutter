@@ -35,6 +35,7 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  //late final bool isSplashOne;
   bool _isLoading = false;
 
   void displayDialog(context, title, text) => showDialog(
@@ -237,11 +238,13 @@ class _SignInPageState extends State<SignInPage> {
       Provider.of<Auth>(context, listen: false).signin(
           data: {
             'email': _emailController.text,
-            'password': _passwordController.text
+            'password': _passwordController.text,
+            //'isSplashOne': isSplashOne // TO BE UPDATED
           },
           success: () {
+            //isSplashOne = true; // TO BE UPDATED
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return SplashScreen();
+              return BottomNavigation();
             }));
           },
           error: () {

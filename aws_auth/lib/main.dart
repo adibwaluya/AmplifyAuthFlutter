@@ -28,6 +28,7 @@ class _MyAppState extends State<MyApp> {
 
   void _tryToAuthenticate() async {
     var token = await storage.read(key: 'token');
+    //var isSplashOne = await storage.read(key: 'isSplashOne');
 
     Provider.of<Auth>(context, listen: false).attempt(token: token);
   }

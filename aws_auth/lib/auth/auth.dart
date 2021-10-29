@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:aws_auth/auth/splash_screens.dart';
 import 'package:aws_auth/auth/user.dart';
 import 'package:aws_auth/dio.dart';
 import 'package:dio/dio.dart';
@@ -11,6 +12,10 @@ class Auth extends ChangeNotifier {
   final storage = new FlutterSecureStorage();
 
   late var token;
+  late var isSplashOne;
+  late var isSplashTwo;
+  //late IsSplashScreens splashScreens;
+
   bool authenticated = false;
   late User? authenticatedUser; // To be updated!
 
@@ -22,16 +27,22 @@ class Auth extends ChangeNotifier {
     return authenticatedUser;
   }
 
+  get registered {
+    return authenticated;
+  }
+
   Future signin(
       {Map? data, required Function success, required Function error}) async {
     try {
       Dio.Response response =
           await dio().post('auth/login', data: json.encode(data));
 
-      var token = json.decode(response.toString())['data']['token'];
+      var token = json.decode(response.toString())['access_token'];
 
       this._setStoredToken(token);
+
       this.attempt(token: token);
+
       notifyListeners();
 
       success();
@@ -46,7 +57,19 @@ class Auth extends ChangeNotifier {
     try {
       Dio.Response response =
           await dio().post('auth/register', data: json.encode(data));
-    } catch (e) {}
+
+      var token = json.decode(response.toString())['access_token'];
+
+      print(token);
+      this._setStoredToken(token);
+      this.attempt(token: token);
+
+      notifyListeners();
+
+      success();
+    } catch (e) {
+      error();
+    }
   }
 
   void attempt({token = ''}) async {
@@ -63,7 +86,11 @@ class Auth extends ChangeNotifier {
       Dio.Response response = await dio().get(
         'auth/user-profile',
       );
+
       this.authenticated = true;
+
+      this.authenticatedUser =
+          User.fromJson(json.decode(response.toString())['data']);
       print(json.decode(response.toString())['data']);
       notifyListeners();
     } catch (e) {
@@ -87,5 +114,13 @@ class Auth extends ChangeNotifier {
 
   void _setStoredToken(String token) async {
     await storage.write(key: 'token', value: token);
+  }
+
+  void _setStoredSplashOne(String confirmed) async {
+    await storage.write(key: 'splashOne', value: confirmed);
+  }
+
+  void _setStoredSplashTwo(String confirmed) async {
+    await storage.write(key: 'splashTwo', value: confirmed);
   }
 }

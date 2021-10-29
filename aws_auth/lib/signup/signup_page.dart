@@ -1,3 +1,4 @@
+import 'package:aws_auth/auth/auth.dart';
 import 'package:aws_auth/auth/auth_credentials.dart';
 import 'package:aws_auth/feed/feed_page.dart';
 import 'package:aws_auth/signin/signin_page.dart';
@@ -6,6 +7,7 @@ import 'package:aws_auth/widgets/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'dart:convert' show json, base64, ascii, utf8;
 
 import '../theme.dart';
@@ -29,6 +31,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _passwordConfirmationController = TextEditingController();
+  int isSplashOne = 0;
+  int isSplashTwo = 0;
 
   bool _isLoading = false;
 
@@ -47,6 +51,8 @@ class _SignUpPageState extends State<SignUpPage> {
       "email": email,
       "password": password,
       "password_confirmation": passwordConfirmation,
+      "is_splash_one": false,
+      "is_splash_two": false
     });
     var jsonResponse = null;
     if (res.statusCode == 201) {
@@ -281,6 +287,49 @@ class _SignUpPageState extends State<SignUpPage> {
       widget.didProvideCredentials(credentials);
     }
 */
+
+    void _submit() {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<Auth>(context, listen: false).signUp(
+          data: {
+            'name': _usernameController.text,
+            'email': _emailController.text,
+            'password': _passwordController.text,
+            'password_confirmation': _passwordConfirmationController.text,
+            'is_splash_one': 0,
+            'is_splash_two': 0,
+          },
+          success: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return BottomNavigation();
+            }));
+          },
+          error: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return SignUpPage();
+            }));
+            if (_usernameController.text.length < 4) {
+              displayDialog(context, 'Invalid Username',
+                  'The Username should be at least 4 characters');
+            } else if (_emailController.text.isEmpty) {
+              displayDialog(context, 'Invalid Email',
+                  'Please fill in the correct Email Address');
+            } else if (_passwordController.text.length < 4) {
+              displayDialog(context, 'Invalid Password',
+                  'The Password should be at least 4 characters');
+            } else if (_passwordConfirmationController.text !=
+                _passwordController.text) {
+              displayDialog(context, 'Incorrect Password',
+                  'Please check your Password and Confirmation Password');
+            } else {
+              displayDialog(context, 'Invalid Credentials',
+                  'The account with this credential was created. Please create a new one');
+            }
+          });
+    }
+
     return SafeArea(
       child: Scaffold(
         body: SignUpBackground(
@@ -319,9 +368,9 @@ class _SignUpPageState extends State<SignUpPage> {
                             top: 25,
                           ),
                           child: ElevatedButton(
-                              onPressed: _isLoading
-                                  ? null
-                                  : () async {
+                              onPressed: _isLoading ? null : () => _submit(),
+                              /* 
+                                  () async {
                                       var name = _usernameController.text;
                                       var email = _emailController.text;
                                       var password = _passwordController.text;
@@ -358,11 +407,14 @@ class _SignUpPageState extends State<SignUpPage> {
                                               "That username is already registered",
                                               "Please try to sign up using another username or log in if you already have an account.");
                                         else {
-                                          displayDialog(context, "Error",
-                                              "An unknown error occured.");
+                                          displayDialog(
+                                              context,
+                                              "That username is already registered",
+                                              "Please try to sign up using another username or log in if you already have an account.");
                                         }
                                       }
                                     },
+                                    */
                               child: Text(
                                 _isLoading ? 'Creating...' : 'Sign Up',
                                 style: whiteTextStyle.copyWith(fontSize: 16),
