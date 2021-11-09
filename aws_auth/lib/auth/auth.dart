@@ -14,6 +14,7 @@ class Auth extends ChangeNotifier {
   late var token;
   late var isSplashOne;
   late var isSplashTwo;
+  late var email;
   //late IsSplashScreens splashScreens;
 
   bool authenticated = false;
@@ -59,9 +60,10 @@ class Auth extends ChangeNotifier {
           await dio().post('auth/register', data: json.encode(data));
 
       var token = json.decode(response.toString())['access_token'];
-
+      var email = json.decode(response.toString())['user']['email'];
       print(token);
       this._setStoredToken(token);
+      this._setStoredEmail(email);
       this.attempt(token: token);
 
       notifyListeners();
@@ -98,6 +100,34 @@ class Auth extends ChangeNotifier {
     }
   }
 
+  void updateSplashOne(
+      {Map? data, required Function success, required Function error}) async {
+    try {
+      Dio.Response response =
+          await dio().post('auth/update-splashOne', data: json.encode(data));
+
+      notifyListeners();
+
+      success();
+      print(response);
+    } catch (e) {
+      error();
+    }
+  }
+
+  void updateSplashTwo(
+      {Map? data, required Function success, required Function error}) async {
+    try {
+      Dio.Response response =
+          await dio().post('auth/update-splashTwo', data: json.encode(data));
+
+      notifyListeners();
+      success();
+    } catch (e) {
+      error();
+    }
+  }
+
   void signOut({required Function success}) async {
     try {
       await dio().post('auth/logout');
@@ -116,11 +146,19 @@ class Auth extends ChangeNotifier {
     await storage.write(key: 'token', value: token);
   }
 
+  void _setStoredEmail(String email) async {
+    await storage.write(key: 'email', value: email);
+  }
+
   void _setStoredSplashOne(String confirmed) async {
     await storage.write(key: 'splashOne', value: confirmed);
   }
 
   void _setStoredSplashTwo(String confirmed) async {
     await storage.write(key: 'splashTwo', value: confirmed);
+  }
+
+  void _getStoredSplashOne(String token) async {
+    await storage.read(key: token);
   }
 }

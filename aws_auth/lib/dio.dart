@@ -6,6 +6,7 @@ final storage = new FlutterSecureStorage();
 Dio dio() {
   Dio dio = new Dio();
 
+  // Previous ip-address: http://192.168.42.75:8000/api/
   dio.options.baseUrl = 'http://192.168.42.75:8000/api/';
 
   dio.interceptors.add(InterceptorsWrapper(onRequest: (request, handler) async {

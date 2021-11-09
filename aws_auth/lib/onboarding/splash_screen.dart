@@ -1,5 +1,8 @@
+import 'package:aws_auth/auth/auth.dart';
 import 'package:aws_auth/onboarding/input_date_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 
 import '../theme.dart';
 
@@ -11,6 +14,30 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  bool _isLoading = false;
+  Text value = Text('');
+  late var email;
+
+  final storage = FlutterSecureStorage();
+  //String? myEmail = await storage.read(key: "email");
+  void _updateSplashOne() async {
+    setState(() {
+      _isLoading = true;
+    });
+    Provider.of<Auth>(context, listen: false).updateSplashOne(
+        data: {'is_splash_one': 1, 'email': await storage.read(key: 'email')},
+        success: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return InputDateScreen();
+          }));
+        },
+        error: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return SplashScreen();
+          }));
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,14 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       height: 42,
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) {
-                            return InputDateScreen();
-                          }),
-                        );
-                      },
+                      onPressed: _isLoading ? null : () => _updateSplashOne(),
                       child: Text('Start Planning'),
                     ),
                   ],

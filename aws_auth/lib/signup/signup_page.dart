@@ -1,12 +1,14 @@
 import 'package:aws_auth/auth/auth.dart';
 import 'package:aws_auth/auth/auth_credentials.dart';
 import 'package:aws_auth/feed/feed_page.dart';
+import 'package:aws_auth/onboarding/splash_screen.dart';
 import 'package:aws_auth/signin/signin_page.dart';
 import 'package:aws_auth/signup/signup_background.dart';
 import 'package:aws_auth/widgets/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert' show json, base64, ascii, utf8;
 
@@ -33,6 +35,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final _passwordConfirmationController = TextEditingController();
   int isSplashOne = 0;
   int isSplashTwo = 0;
+  final dateStart = "dd/mm/YYYY";
+  final dateEnd = "dd/mm/YYYY";
 
   bool _isLoading = false;
 
@@ -300,10 +304,12 @@ class _SignUpPageState extends State<SignUpPage> {
             'password_confirmation': _passwordConfirmationController.text,
             'is_splash_one': 0,
             'is_splash_two': 0,
+            'date_start': dateStart,
+            'date_end': dateEnd
           },
           success: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return BottomNavigation();
+              return SplashScreen();
             }));
           },
           error: () {

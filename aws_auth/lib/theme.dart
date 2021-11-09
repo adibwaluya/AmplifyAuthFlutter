@@ -9,6 +9,7 @@ Color greyColor = const Color(0xffEAEAEA);
 Color greyBorderColor = const Color(0xffC4C4C4);
 Color whiteColor = const Color(0xffFFFFFF);
 Color blackColor = const Color(0xff000000);
+Color greenColor = const Color(0xff63BC55);
 
 double edge = 28;
 double spaceToHeader = 25;
