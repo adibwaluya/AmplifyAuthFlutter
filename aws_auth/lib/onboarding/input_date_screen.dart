@@ -27,8 +27,8 @@ class _InputDateScreenState extends State<InputDateScreen> {
     Provider.of<Auth>(context, listen: false).updateSplashTwo(
         data: {
           'is_splash_two': 1,
-          'date_start': await storage.read(key: 'startDate'),
-          'date_end': await storage.read(key: 'endDate'),
+          'date_start': await storage.read(key: 'dateStart'),
+          'date_end': await storage.read(key: 'dateEnd'),
           'email': await storage.read(key: 'email'),
         },
         success: () {

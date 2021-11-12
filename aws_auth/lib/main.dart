@@ -1,5 +1,7 @@
 import 'package:aws_auth/auth/auth_service.dart';
 import 'package:aws_auth/signin/signin_page.dart';
+import 'package:aws_auth/utils/date_simple_preferences.dart';
+import 'package:aws_auth/widgets/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -7,8 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'auth/auth.dart';
 
 const SERVER_IP = 'http://192.168.42.75:8000';
-final storage = FlutterSecureStorage();
-void main() {
+//final storage = FlutterSecureStorage();
+void main() async {
+  // await DateSimplePreferences.init();
   runApp(ChangeNotifierProvider(
     create: (context) => Auth(),
     child: const MyApp(),
@@ -25,12 +28,22 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late SharedPreferences sharedPreferences;
   final storage = new FlutterSecureStorage();
+  String _dateEndString = "";
 
   void _tryToAuthenticate() async {
     var token = await storage.read(key: 'token');
+    var dateEnd = await storage.read(key: 'dateEnd');
     //var isSplashOne = await storage.read(key: 'isSplashOne');
 
     Provider.of<Auth>(context, listen: false).attempt(token: token);
+    // Provider.of<Auth>(context, listen: false).attemptDate(endDate: dateEnd);
+  }
+
+  _loadDate() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _dateEndString = (prefs.getString('endDatePref') ?? "");
+    });
   }
   /*
   Future<String> get jwtOrEmpty async {
@@ -56,7 +69,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _tryToAuthenticate();
-    _authService.showLogIn();
+    _loadDate();
+    // _authService.showLogIn();
   }
 
 /*
