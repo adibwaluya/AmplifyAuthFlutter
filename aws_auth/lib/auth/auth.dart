@@ -153,6 +153,66 @@ class Auth extends ChangeNotifier {
           await dio().post('auth/update-splashTwo', data: json.encode(data));
 
       notifyListeners();
+
+      success();
+      print(response);
+    } catch (e) {
+      error();
+    }
+  }
+
+  void updateSplashThree(
+      {Map? data, required Function success, required Function error}) async {
+    try {
+      Dio.Response response =
+          await dio().post('auth/update-splashThree', data: json.encode(data));
+
+      notifyListeners();
+
+      success();
+      print(response);
+    } catch (e) {
+      error();
+    }
+  }
+
+  void updateSplashFour(
+      {Map? data, required Function success, required Function error}) async {
+    try {
+      Dio.Response response =
+          await dio().post('auth/update-splashFour', data: json.encode(data));
+
+      notifyListeners();
+
+      success();
+      print(response);
+    } catch (e) {
+      error();
+    }
+  }
+
+  void updateSplashFive(
+      {Map? data, required Function success, required Function error}) async {
+    try {
+      Dio.Response response =
+          await dio().post('auth/update-splashFive', data: json.encode(data));
+
+      notifyListeners();
+
+      success();
+      print(response);
+    } catch (e) {
+      error();
+    }
+  }
+
+  void updateSplashSix(
+      {Map? data, required Function success, required Function error}) async {
+    try {
+      Dio.Response response =
+          await dio().post('auth/update-splashSix', data: json.encode(data));
+
+      notifyListeners();
       success();
     } catch (e) {
       error();

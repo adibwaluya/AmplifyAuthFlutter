@@ -304,6 +304,10 @@ class _SignUpPageState extends State<SignUpPage> {
             'password_confirmation': _passwordConfirmationController.text,
             'is_splash_one': 0,
             'is_splash_two': 0,
+            'is_splash_three': 0,
+            'is_splash_four': 0,
+            'is_splash_five': 0,
+            'is_splash_six': 0,
             'date_start': dateStart,
             'date_end': dateEnd
           },

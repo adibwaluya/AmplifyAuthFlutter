@@ -1,5 +1,6 @@
 import 'package:aws_auth/auth/auth.dart';
 import 'package:aws_auth/onboarding/input_date_screen.dart';
+import 'package:aws_auth/onboarding/onboarding_one.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
         data: {'is_splash_one': 1, 'email': await storage.read(key: 'email')},
         success: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return InputDateScreen();
+            return OnboardingOneScreen();
           }));
         },
         error: () {

@@ -19,14 +19,14 @@ class _InputDateScreenState extends State<InputDateScreen> {
   bool _isLoading = false;
   final storage = FlutterSecureStorage();
 
-  void _updateSplashTwo() async {
+  void _updateSplashSix() async {
     setState(() {
       _isLoading = true;
     });
 
-    Provider.of<Auth>(context, listen: false).updateSplashTwo(
+    Provider.of<Auth>(context, listen: false).updateSplashSix(
         data: {
-          'is_splash_two': 1,
+          'is_splash_six': 1,
           'date_start': await storage.read(key: 'dateStart'),
           'date_end': await storage.read(key: 'dateEnd'),
           'email': await storage.read(key: 'email'),
@@ -73,7 +73,7 @@ class _InputDateScreenState extends State<InputDateScreen> {
                     ),
                   ),
                 ),
-                onPressed: _isLoading ? null : () => _updateSplashTwo(),
+                onPressed: _isLoading ? null : () => _updateSplashSix(),
                 child: Text(
                   'Save Input Date',
                   style: TextStyle(fontSize: 15, color: Colors.white),
